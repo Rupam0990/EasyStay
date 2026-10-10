@@ -1,0 +1,106 @@
+<% layout('/layouts/boilerplate') -%>
+        <div class="row mt-3">
+                <div class="col-8 offset-2">
+
+                        <h3>Edit Listing :</h3>
+
+                        <%
+                                const originalImageUrl = place.image?.url || '';
+                                const previewImageUrl = originalImageUrl
+                                        ? originalImageUrl.replace('/upload/', '/upload/q_40,w_350,h_260,c_fill,ar_1:1,fl_progressive/')
+                                        : '';
+                        %>
+
+                        <% if (originalImageUrl) { %>
+                                <div class="mb-3">
+                                        <label class="form-label">Image Preview</label>
+                                        <div class="d-flex gap-3 flex-wrap align-items-end">
+                                                
+                                                <div>
+                                                     
+                                                        <img src="<%= previewImageUrl %>" alt=" listing image"
+                                                                class="img-fluid rounded shadow-sm" style="max-width: 220px; max-height: 180px; object-fit: cover; filter: saturate(0.8) contrast(0.85);">
+                                                </div>
+                                        </div>
+                                </div>
+                        <% } %>
+
+                        <form action="/listings/<%=place._id%>?_method=PUT" method="post" novalidate class="needs-validation" enctype="multipart/form-data">
+                                <div class="mb-3">
+                                        <label for="title" class="form-label">Title</label>
+                                        <input type="text" class="form-control" id="title" value="<%=place.title%>"
+                                                name="listing[title]" required>
+                                        <div class="valid-feedback">
+                                                Title Looks good!
+                                        </div>
+                                        <div class="invalid-feedback">
+                                                Please enter a valid title!
+                                        </div>
+                                </div>
+
+                                <div class="mb-3">
+                                        <label for="des" class="form-label">Description</label>
+                                        <textarea name="listing[description]" class="form-control"
+                                                id="des" required><%=place.description%></textarea>
+                                        <div class="valid-feedback">
+                                                Description Looks good!
+                                        </div>
+                                        <div class="invalid-feedback">
+                                                Please enter a short Description!
+                                        </div>
+                                </div>
+
+                                <div class="mb-3">
+                                        <label for="img" class="form-label">Upload New Image</label>
+                                        <input type="file" class="form-control" name="listing[image]" id="img">
+                                </div>
+
+                                <div class="row">
+                                        <div class="mb-3 col-md-6">
+                                                <label for="price" class="form-label">Price</label>
+                                                <input type="number" class="form-control" name="listing[price]"
+                                                        id="price" value="<%=place.price%>" required>
+                                                <div class="invalid-feedback">
+                                                        Please enter a valid price!
+                                                </div>
+                                        </div>
+                                        <div class="mb-3 col-md-6">
+                                                <label for="cou" class="form-label">Country</label>
+                                                <input type="text" class="form-control" name="listing[country]" id="cou"
+                                                        value="<%=place.country%>" required>
+                                                <div class="invalid-feedback">
+                                                        Please enter Country!
+                                                </div>
+                                        </div>
+                                </div>
+
+                                <div class="mb-3">
+                                        <label for="category" class="form-label">Category</label>
+                                        <select class="form-select" name="listing[category]" id="category">
+                                                <option value="trending" <%= (place.category || 'trending') === 'trending' ? 'selected' : '' %>>Trending</option>
+                                                <option value="rooms" <%= (place.category || 'trending') === 'rooms' ? 'selected' : '' %>>Rooms</option>
+                                                <option value="iconic-cities" <%= (place.category || 'trending') === 'iconic-cities' ? 'selected' : '' %>>Iconic Cities</option>
+                                                <option value="cabins" <%= (place.category || 'trending') === 'cabins' ? 'selected' : '' %>>Cabins</option>
+                                                <option value="amazing-pools" <%= (place.category || 'trending') === 'amazing-pools' ? 'selected' : '' %>>Amazing Pools</option>
+                                                <option value="camping" <%= (place.category || 'trending') === 'camping' ? 'selected' : '' %>>Camping</option>
+                                                <option value="farms" <%= (place.category || 'trending') === 'farms' ? 'selected' : '' %>>Farms</option>
+                                                <option value="arctic" <%= (place.category || 'trending') === 'arctic' ? 'selected' : '' %>>Arctic</option>
+                                                <option value="dome" <%= (place.category || 'trending') === 'dome' ? 'selected' : '' %>>Dome</option>
+                                                <option value="boats" <%= (place.category || 'trending') === 'boats' ? 'selected' : '' %>>Boats</option>
+                                        </select>
+                                </div>
+
+                                <div class="mb-3">
+                                        <label for="location" class="form-label">Location</label>
+                                        <input type="text" class="form-control" name="listing[location]"
+                                                id="location" value="<%=place.location%>" required>
+                                        <div class="invalid-feedback">
+                                                Please enter Location!
+                                        </div>
+                                </div>
+
+                                <button class="btn btn-dark add-btn mt-2">Edit</button>
+                                <br><br>
+                        </form>
+                </div>
+        </div>

@@ -1,0 +1,36 @@
+<nav class="navbar navbar-expand-md bg-white border-bottom sticky-top shadow-sm">
+  <div class="container-fluid px-4">
+    <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="/listings">
+      <i class="fa-regular fa-compass"></i>
+      <span>StayEase</span>
+    </a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav me-auto">
+        <a class="nav-link" href="/listings">Explore</a>
+        
+      </div>
+
+      <div class="d-flex align-items-center gap-3 ms-auto navbar-actions">
+        <form class="search-box" action="/listings" method="GET" role="search">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" name="q" value="<%= typeof searchQuery !== 'undefined' ? searchQuery : '' %>" placeholder="Search destinations" aria-label="Search destinations">
+          <button type="submit" class="search-submit-btn" aria-label="Search listings">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </button>
+        </form>
+        <a class="nav-link host-link" href="/listings/new">Airbnb your home</a>
+        <% if (currentUser) { %>
+          <a href="/logout" class="btn btn-danger btn-sm"><b>Logout</b></a>
+        <% } else { %>
+          <a href="/login" class="btn btn-outline-dark btn-sm"><b>Login</b></a>
+          <a href="/signup" class="btn btn-danger btn-sm"><b>Sign Up</b></a>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</nav>

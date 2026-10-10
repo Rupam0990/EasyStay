@@ -1,0 +1,63 @@
+<% layout('/layouts/boilerplate') -%>
+
+<div class="row mt-5 justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <div class="card border-0 shadow-sm text-center p-4">
+            <div class="card-body">
+                <!-- Status Code Icon / Badge -->
+                <div class="mb-3">
+                    <span class="badge bg-danger-subtle text-danger fs-6 px-3 py-2 rounded-pill">
+                        Error <%= err.status %>
+                    </span>
+                </div>
+
+                <!-- Error Heading -->
+                <h2 class="card-title fw-bold text-dark mb-2">
+                    <% if (err.status === 404) { %>
+                        Page Not Found
+                    <% } else if (err.status === 400) { %>
+                        Invalid Request
+                    <% } else { %>
+                        Oops! Something went wrong
+                    <% } %>
+                </h2>
+
+                <!-- Informative Error Message -->
+                <p class="card-text text-muted mb-4 fs-5">
+                    <%= message %>
+                </p>
+
+                <!-- Navigation Action Buttons -->
+                <div class="d-flex justify-content-center gap-2 mb-3">
+                    <a href="/listings" class="btn btn-primary px-4 py-2">
+                        <i class="fa-solid fa-house me-1"></i> Back to Explore
+                    </a>
+                    <button onclick="window.history.back()" class="btn btn-outline-secondary px-3 py-2">
+                        Go Back
+                    </button>
+                </div>
+
+                <!-- Developer Stack Trace (Collapsible) -->
+                <% if (process.env.NODE_ENV !== "production" && err.stack) { %>
+                    <div class="text-start mt-4 pt-3 border-top">
+                        <button 
+                            class="btn btn-sm btn-link text-decoration-none text-muted p-0" 
+                            type="button" 
+                            data-bs-toggle="collapse" 
+                            data-bs-target="#stackTraceCollapse" 
+                            aria-expanded="false" 
+                            aria-controls="stackTraceCollapse">
+                            ▸ View Error Details (Dev Mode)
+                        </button>
+                        <div class="collapse mt-2" id="stackTraceCollapse">
+                            <div class="bg-dark text-light p-3 rounded font-monospace small" style="overflow-x: auto; max-height: 220px;">
+                                <pre class="mb-0 text-wrap"><%= err.stack %></pre>
+                            </div>
+                        </div>
+                    </div>
+                <% } %>
+
+            </div>
+        </div>
+    </div>
+</div>

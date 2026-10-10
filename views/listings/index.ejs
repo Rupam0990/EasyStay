@@ -1,0 +1,121 @@
+<% layout('/layouts/boilerplate') -%>
+
+    <div class="category-panel-wrapper">
+        <div class="category-panel">
+            <a class="category-item <%= (!activeCategory || activeCategory === 'trending') ? 'active' : '' %>" href="/listings<%= searchQuery ? '?q=' + encodeURIComponent(searchQuery) : '' %>">
+                <i class="fa-solid fa-fire"></i>
+                <span>Trending</span>
+            </a>
+            <a class="category-item <%= activeCategory === 'rooms' ? 'active' : '' %>" href="/listings?category=rooms<%= searchQuery ? '&q=' + encodeURIComponent(searchQuery) : '' %>">
+                <i class="fa-solid fa-house"></i>
+                <span>Rooms</span>
+            </a>
+            <a class="category-item <%= activeCategory === 'iconic-cities' ? 'active' : '' %>" href="/listings?category=iconic-cities<%= searchQuery ? '&q=' + encodeURIComponent(searchQuery) : '' %>">
+                <i class="fa-solid fa-city"></i>
+                <span>Iconic Cities</span>
+            </a>
+            <a class="category-item <%= activeCategory === 'cabins' ? 'active' : '' %>" href="/listings?category=cabins<%= searchQuery ? '&q=' + encodeURIComponent(searchQuery) : '' %>">
+                <i class="fa-solid fa-house-chimney"></i>
+                <span>Cabins</span>
+            </a>
+            <a class="category-item <%= activeCategory === 'amazing-pools' ? 'active' : '' %>" href="/listings?category=amazing-pools<%= searchQuery ? '&q=' + encodeURIComponent(searchQuery) : '' %>">
+                <i class="fa-solid fa-water-ladder"></i>
+                <span>Amazing Pools</span>
+            </a>
+            <a class="category-item <%= activeCategory === 'camping' ? 'active' : '' %>" href="/listings?category=camping<%= searchQuery ? '&q=' + encodeURIComponent(searchQuery) : '' %>">
+                <i class="fa-solid fa-campground"></i>
+                <span>Camping</span>
+            </a>
+            <a class="category-item <%= activeCategory === 'farms' ? 'active' : '' %>" href="/listings?category=farms<%= searchQuery ? '&q=' + encodeURIComponent(searchQuery) : '' %>">
+                <i class="fa-solid fa-tractor"></i>
+                <span>Farms</span>
+            </a>
+            <a class="category-item <%= activeCategory === 'arctic' ? 'active' : '' %>" href="/listings?category=arctic<%= searchQuery ? '&q=' + encodeURIComponent(searchQuery) : '' %>">
+                <i class="fa-solid fa-snowflake"></i>
+                <span>Arctic</span>
+            </a>
+            <a class="category-item <%= activeCategory === 'dome' ? 'active' : '' %>" href="/listings?category=dome<%= searchQuery ? '&q=' + encodeURIComponent(searchQuery) : '' %>">
+                <i class="fa-solid fa-house"></i>
+                <span>Dome</span>
+            </a>
+            <a class="category-item <%= activeCategory === 'boats' ? 'active' : '' %>" href="/listings?category=boats<%= searchQuery ? '&q=' + encodeURIComponent(searchQuery) : '' %>">
+                <i class="fa-solid fa-ship"></i>
+                <span>Boats</span>
+            </a>
+        </div>
+
+        <button class="category-scroll-btn" type="button" aria-label="Next categories">
+            <i class="fa-solid fa-arrow-right"></i>
+        </button>
+
+        <div class="tax-toggle-wrap">
+            <span class="tax-toggle-label">Display total after taxes</span>
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="taxToggle">
+            </div>
+        </div>
+    </div>
+
+    <% if (allListings.length === 0) { %>
+        <div class="alert alert-light border rounded-4 mt-4 text-center">
+            No listings match "<%= searchQuery %>".
+        </div>
+    <% } %>
+
+    <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3">
+
+        <% for( let list of allListings ) { %>
+            <a href="/listings/<%- list._id %>" class="listing-link">
+                <div class="card col">
+                    <img src="<%- list.image.url %>" class="card-img-top " style="height: 20rem;" alt="Listing_img">
+                    <div class="card-img-overlay">
+
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">
+                            <b><%- list.title %></b> <br>
+                            <small class="text-muted">Owner: <%= list.owner && list.owner.username ? list.owner.username : "Unknown" %></small><br>
+                            <span class="listing-price" data-base-price="<%= list.price != null ? list.price : 0 %>">
+                                &#8377; <%= list.price !=null ? list.price.toLocaleString("en-IN") : "0" %>
+                            </span> / night
+                        </p>
+                    </div>
+                </div>
+            </a>
+
+            <% } %>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const scrollBtn = document.querySelector('.category-scroll-btn');
+            const categoryPanel = document.querySelector('.category-panel');
+            const taxToggle = document.getElementById('taxToggle');
+            const priceEls = document.querySelectorAll('.listing-price');
+
+            if (scrollBtn && categoryPanel) {
+                scrollBtn.addEventListener('click', () => {
+                    categoryPanel.scrollBy({ left: 220, behavior: 'smooth' });
+                });
+            }
+
+            const updatePrices = () => {
+                priceEls.forEach((priceEl) => {
+                    const basePrice = Number(priceEl.dataset.basePrice || 0);
+                    const totalPrice = taxToggle && taxToggle.checked ? Math.round(basePrice * 1.18) : basePrice;
+                    priceEl.textContent = `₹ ${totalPrice.toLocaleString('en-IN')}`;
+                });
+            };
+
+            if (taxToggle) {
+                const savedState = localStorage.getItem('displayTotalAfterTaxes') === 'true';
+                taxToggle.checked = savedState;
+                taxToggle.addEventListener('change', () => {
+                    localStorage.setItem('displayTotalAfterTaxes', String(taxToggle.checked));
+                    updatePrices();
+                });
+                updatePrices();
+            }
+        });
+    </script>
